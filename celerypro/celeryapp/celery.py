@@ -1,11 +1,18 @@
 import os
 
 from celery import Celery
-
+from celery.schedules import crontab
 # Set the default Django settings module for the 'celery' program.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'celerypro.settings')
-
 app = Celery('celerypro')
+app.conf.update(timezone = 'Asia/Kolkata')
+
+app.conf.beat_schedule ={
+    'print-event-10-sec':{
+        'task':'celeryapp.task.print_task',
+        'schedule':crontab(),
+    }
+}
 
 # Using a string here means the worker doesn't have to serialize
 # the configuration object to child processes.
@@ -20,3 +27,7 @@ app.autodiscover_tasks()
 @app.task(bind=True)
 def debug_task(self):
     print(f'Request: {self.request!r}')
+
+# @app.task
+# def print_task():
+#     print("hello")
