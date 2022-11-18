@@ -8,7 +8,7 @@ app = Celery('celerypro')
 app.conf.update(timezone = 'Asia/Kolkata')
 
 app.conf.beat_schedule ={
-    'print-event-10-sec':{
+    'print-event-1-min':{
         'task':'celeryapp.task.print_task',
         'schedule':crontab(),
     }
